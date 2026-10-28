@@ -14,3 +14,10 @@ Codex 작업용 개인 지침·설정·스킬 모음. 과제 내용·답안·결
 | `install.sh` | 작업 폴더에 복사(기존 파일은 덮어쓰지 않음) |
 
 메인 모델(Sol 6.1)은 세션에서 `/model`로 선택한다. 샌드박스·승인 설정은 지정하지 않는다(플랫폼 설정 상속).
+
+## 설치 (Codex가 이 README를 읽고 실행)
+1. 이 저장소를 작업 폴더 **밖**(`/tmp/cofa-kit`)에 clone한다. 작업 폴더 안에 clone하지 않는다.
+2. 작업 폴더 루트에서 `bash /tmp/cofa-kit/install.sh` 를 실행한다. 기존 파일은 덮어쓰지 않는다.
+3. 출력된 `[copy]`/`[append]`/`[skip]` 결과를 그대로 보고한다.
+4. 커밋: `git add AGENTS.md .codex .agents && git commit -m "작업 규칙·서브에이전트·스킬 설정 (출처: 공개 저장소 MIIXmix/cofa-kit)"`
+5. 사용자에게 "Codex를 종료 후 다시 실행해야 규칙·스킬이 적용된다"고 알린다.
