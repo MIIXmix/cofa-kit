@@ -11,6 +11,7 @@ description: PLAN.md 승인 후 웹 서비스를 세로 단위로 구현하고 �
    기본값: Python FastAPI(또는 Flask) + 정적 HTML/JS 1페이지 + 저장은 JSON 또는 SQLite 파일.
    프런트 빌드 도구(React·Vite 등)는 과제가 요구할 때만 쓴다.
 3. 의존성은 requirements.txt 또는 package.json에 버전과 함께 적는다.
+4. 패키지 설치가 실패하면(네트워크 차단 등) 재시도는 1회만. 이후 설치 없이 되는 것으로 전환한다: Node 내장 `http` 모듈 또는 Python 표준 라이브러리 `http.server` + `json`/`sqlite3`. 전환 사실을 COLLAB_LOG.md에 기록한다.
 
 ## 2. 서버 규칙
 - 호스트 0.0.0.0, 포트는 환경변수 PORT(기본 8000 등)로 받고 시작 시 "listening on 0.0.0.0:<포트>"를 출력한다.

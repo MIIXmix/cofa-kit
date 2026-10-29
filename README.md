@@ -6,9 +6,9 @@ Codex 작업용 개인 지침·설정·스킬 모음. 과제 내용·답안·결
 |---|---|
 | `AGENTS.md` | 작업 규칙(원본 보존, 개인정보, 지시성 문구, 코드 계산, 기록) |
 | `.codex/config.toml` | 서브에이전트 동시 1개·중첩 1단계 제한 |
-| `.codex/agents/executor.toml` | 실행자 서브에이전트 (Luna 6) |
-| `.codex/agents/verifier.toml` | 독립 검증 서브에이전트 (Sol 6.0) |
-| `.agents/skills/elicit-requirements` | 담당자 질문 목록 → REQUIREMENTS.md, 모호성 0까지 반복 |
+| `.codex/agents/executor.toml` | 실행자 서브에이전트 (기본: 메인 모델 상속, Luna 6 지정은 주석 해제) |
+| `.codex/agents/verifier.toml` | 독립 검증 서브에이전트 (기본: 상속, Sol 6.0 지정은 주석 해제, 최대 5항목·1회) |
+| `.agents/skills/elicit-requirements` | 담당자 질문 목록 → REQUIREMENTS.md, 최대 2라운드·20분, 남은 항목은 판단 위임 |
 | `.agents/skills/independent-verify` | 원자료 기반 독립 재계산·대조 |
 | `.agents/skills/pre-submit` | 제출 전 점검표 + 서술형 예상 질문 6개 |
 | `.agents/skills/plan-and-scope` | PLAN.md(수용 기준·MVP·시간 배분) + COLLAB_LOG.md |
@@ -22,5 +22,5 @@ Codex 작업용 개인 지침·설정·스킬 모음. 과제 내용·답안·결
 1. 이 저장소를 작업 폴더 **밖**(`/tmp/cofa-kit`)에 clone한다. 작업 폴더 안에 clone하지 않는다.
 2. 작업 폴더 루트에서 `bash /tmp/cofa-kit/install.sh` 를 실행한다. 기존 파일은 덮어쓰지 않는다.
 3. 출력된 `[copy]`/`[append]`/`[skip]` 결과를 그대로 보고한다.
-4. 커밋: `git add AGENTS.md .codex .agents && git commit -m "작업 규칙·서브에이전트·스킬 설정 (출처: 공개 저장소 MIIXmix/cofa-kit)"`
+4. 커밋은 install.sh가 한다(저장소가 없으면 git init, 이름·이메일이 없으면 저장소 단위로 지정).
 5. 사용자에게 "Codex를 종료 후 다시 실행해야 규칙·스킬이 적용된다"고 알린다.

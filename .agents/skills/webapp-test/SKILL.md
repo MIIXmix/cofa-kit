@@ -6,7 +6,7 @@ description: PLAN.md의 수용 기준을 자동 테스트로 옮기고 터미널
 # 웹 서비스 테스트
 
 ## 1. 자동 테스트 (터미널 실행 결과가 평가 기록으로 남는다)
-- 도구: Python이면 pytest + FastAPI TestClient(또는 Flask test_client), Node면 내장 `node --test` + fetch. 새 도구 설치는 최소로.
+- 도구: Python이면 pytest + FastAPI TestClient(또는 Flask test_client), Node면 내장 `node --test` + fetch. 설치가 막히면 Python 표준 `unittest` + `urllib`로 실행 중 서버를 호출한다.
 - 수용 기준 1개당 테스트 1개 이상. 테스트 이름에 수용 기준 번호를 넣는다. 예: `test_AC3_수량0_저장거부`.
 - 수용 기준마다 다음 경우를 검토해 해당하는 것만 추가한다:
   정상값 / 빈 값 / 형식 오류 / 경계값(이상·초과 양쪽) / 중복 / 한글·공백 / 대량(100건 이상) / 새로고침·재시작 후 유지.

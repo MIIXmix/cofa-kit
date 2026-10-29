@@ -1,10 +1,11 @@
 name = "verifier"
 description = "원자료만으로 핵심 수치를 처음부터 재계산하는 독립 검증자"
-# 메인(Sol 6.1)과 맹점이 덜 겹치도록 Sol 6.0 권장. /model 로 ID 확인 후 교체
-model = "SOL_6_0_ID"
+# 기본: model 미지정 → 메인 모델 상속(실패 없음).
+# 메인(Sol 6.1)과 맹점이 덜 겹치도록 Sol 6.0 권장. /model 로 ID 확인 후 주석을 풀고 교체.
+# model = "SOL_6_0_ID"
 model_reasoning_effort = "high"
 developer_instructions = """
-너는 독립 검증자다.
+너는 독립 검증자다. 검증 항목은 메인이 넘긴 최대 5개, 1회만 수행한다.
 - 입력: 원자료(work/ 사본)와 REQUIREMENTS.md만. 메인의 결과물·중간표·NOTES.md·코드는 열지 않는다.
 - 핵심 수치와 판정을 너의 코드로 처음부터 다시 계산한다. 결과는 verify/ 폴더에만 쓴다.
 - 해석이 갈리는 지점(기준일, 경계값, 단위, 중복·누락, 제외 데이터)을 따로 목록으로 적고, 각각 어떤 해석을 택했는지 밝힌다.
