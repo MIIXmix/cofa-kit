@@ -11,6 +11,9 @@ Codex 작업용 개인 지침·설정·스킬 모음. 과제 내용·답안·결
 | `.agents/skills/elicit-requirements` | 담당자 질문 목록 → REQUIREMENTS.md, 모호성 0까지 반복 |
 | `.agents/skills/independent-verify` | 원자료 기반 독립 재계산·대조 |
 | `.agents/skills/pre-submit` | 제출 전 점검표 + 서술형 예상 질문 6개 |
+| `.agents/skills/plan-and-scope` | PLAN.md(수용 기준·MVP·시간 배분) + COLLAB_LOG.md |
+| `.agents/skills/webapp-build` | 웹 서비스 세로 단위 구현, 0.0.0.0·Browser 미리보기 규칙 |
+| `.agents/skills/webapp-test` | 수용 기준 → 자동 테스트, Browser 수동 점검표 |
 | `install.sh` | 작업 폴더에 복사(기존 파일은 덮어쓰지 않음) |
 
 메인 모델(Sol 6.1)은 세션에서 `/model`로 선택한다. 샌드박스·승인 설정은 지정하지 않는다(플랫폼 설정 상속).
