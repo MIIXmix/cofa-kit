@@ -14,6 +14,7 @@ Codex 작업용 개인 지침·설정·스킬 모음. 과제 내용·답안·결
 | `.agents/skills/plan-and-scope` | PLAN.md(수용 기준·MVP·시간 배분) + COLLAB_LOG.md |
 | `.agents/skills/webapp-build` | 웹 서비스 세로 단위 구현, 0.0.0.0·Browser 미리보기 규칙 |
 | `.agents/skills/webapp-test` | 수용 기준 → 자동 테스트, Browser 수동 점검표 |
+| `.agents/skills/cofa-semiconductor` | 반도체 수율·검사·결함·설비 시계열(SPC) 분석 규칙. 출처: [ripplelover/cofa-ready-kit](https://github.com/ripplelover/cofa-ready-kit) (MIT, 폴더 안 LICENSE), 원본에 없는 join-check 도구 언급만 수정 |
 | `install.sh` | 작업 폴더에 복사(기존 파일은 덮어쓰지 않음) |
 
 메인 모델(Sol 6.1)은 세션에서 `/model`로 선택한다. 샌드박스·승인 설정은 지정하지 않는다(플랫폼 설정 상속).
