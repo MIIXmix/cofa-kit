@@ -8,6 +8,7 @@ Codex 작업용 개인 지침·설정·스킬 모음. 과제 내용·답안·결
 | `.codex/config.toml` | 서브에이전트 동시 1개·중첩 1단계 제한 |
 | `.codex/agents/executor.toml` | 실행자 서브에이전트 (기본: 메인 모델 상속, Luna 6 지정은 주석 해제) |
 | `.codex/agents/verifier.toml` | 독립 검증 서브에이전트 (기본: 상속, Sol 6.0 지정은 주석 해제, 최대 5항목·1회) |
+| `.codex/agents/auditor.toml` | 읽기 전용(`sandbox_mode = "read-only"`) 적대적 감사 서브에이전트, 5단계 중 감사 단계 담당 |
 | `.agents/skills/elicit-requirements` | 담당자 질문 목록 → REQUIREMENTS.md, 최대 2라운드·20분, 남은 항목은 판단 위임 |
 | `.agents/skills/independent-verify` | 원자료 기반 독립 재계산·대조 |
 | `.agents/skills/pre-submit` | 제출 전 점검표 + 서술형 예상 질문 6개 |
