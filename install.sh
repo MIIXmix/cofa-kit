@@ -30,7 +30,7 @@ done
 
 # 3) 프로젝트 config.toml: 플랫폼 파일이 있으면 절대 건드리지 않음
 if [ -e "$DEST/.codex/config.toml" ]; then
-  echo "[skip] .codex/config.toml 존재 → 수정하지 않음. 동시 실행 제한은 AGENTS.md 규칙으로 대체"
+  echo "[skip] .codex/config.toml 존재 → 수정하지 않음. 중첩 금지는 AGENTS.md 규칙으로 대체"
 else
   cp "$KIT/.codex/config.toml" "$DEST/.codex/config.toml"; echo "[copy] .codex/config.toml"
   OURS_CFG=1
