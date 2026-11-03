@@ -166,6 +166,56 @@ class Tests(CheckCase):
         self.commit()
         self.assertEqual(self.status(self.run_check()[1], "debug_mode"), "FAIL")
 
+    def test_baseline_untracked_ignored_but_new_file_fails(self):
+        self.w(".bashrc", "x\n")
+        self.w(".cache/a/b.txt", "x\n")
+        self.w(".cofa_baseline", ".bashrc\n.cache/\n")
+        self.assertEqual(self.status(self.run_check()[1], "git_clean"), "PASS")
+        self.w("new.txt", "x\n")
+        self.w(".cache/a/c.txt", "x\n")
+        rc, out = self.run_check()
+        self.assertEqual(self.status(out, "git_clean"), "FAIL", out)
+        self.assertIn("new.txt", out)
+        self.assertNotIn(".cache", out)
+        os.remove(os.path.join(self.d, "new.txt"))
+        self.w(".bashrc.bak", "x\n")  # 기준선 파일 이름 접두만 같은 새 파일은 잡는다
+        rc, out = self.run_check()
+        self.assertEqual(self.status(out, "git_clean"), "FAIL", out)
+        self.assertIn(".bashrc.bak", out)
+        os.remove(os.path.join(self.d, ".bashrc.bak"))
+        self.git("add", ".bashrc")
+        self.git("commit", "-q", "-m", "b")
+        self.assertEqual(self.status(self.run_check()[1], "git_clean"), "PASS")
+        self.w(".bashrc", "z\n")  # 추적 파일 수정은 기준선에 있어도 잡는다
+        rc, out = self.run_check()
+        self.assertEqual(self.status(out, "git_clean"), "FAIL", out)
+        self.assertIn(".bashrc", out)
+
+    def test_baseline_ignores_non_hidden_entries(self):
+        self.w("data/demo.csv", "a\n1\n")
+        self.w(".cofa_baseline", "data/\nREADME.md\n./\n")
+        rc, out = self.run_check()
+        self.assertEqual(self.status(out, "git_clean"), "FAIL", out)
+        self.assertIn("data/demo.csv", out)
+
+    def test_baseline_unused_when_root_is_subfolder(self):
+        self.w(".task/app.py", "x = 1\n")
+        self.w(".task/.cofa_baseline", ".task/\n")  # 저장소 루트 기준 경로라 가드가 없으면 전부 숨겨진다
+        self.w(".bashrc", "x\n")  # root 밖 상위 파일은 검사 범위가 아니다
+        rc, out = self.run_check(root=os.path.join(self.d, ".task"))
+        self.assertEqual(self.status(out, "git_clean"), "FAIL", out)
+        self.assertIn(".task/app.py", out)
+        self.assertNotIn(".bashrc", out)
+
+    def test_hidden_env_dir_hint_says_no_git_add(self):
+        self.w(".local/lib/site.py", "x\n")
+        self.w(".bash_history", "x\n")
+        self.w(".gitignore", "x\n")
+        rc, out = self.run_check()
+        self.assertRegex(out, r"\.local/lib/site\.py[^\n]*git add 금지")
+        self.assertRegex(out, r"\.bash_history[^\n]*git add 금지")
+        self.assertNotRegex(out, r"\.gitignore 커밋되지[^\n]*git add 금지")
+
     def test_uncommitted_fails_and_bad_args_exit_2(self):
         self.w("new.txt", "x\n")
         self.assertEqual(self.status(self.run_check()[1], "git_clean"), "FAIL")

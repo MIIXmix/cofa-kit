@@ -281,13 +281,40 @@ def raw_unchanged(c):
     return len(c.raw), bad
 
 
+def baseline(c):
+    """install.sh가 설치 직전 남긴 최상위 숨김 미추적 경로(홈 폴더 환경 파일 등). 폴더는 / 로 끝난다.
+    숨김이 아닌 줄은 무시하고(과제 파일 은닉 방지), root가 저장소 루트가 아니면 쓰지 않는다(경로 기준이 다름)."""
+    if git(c.root, "rev-parse", "--show-prefix")[1].strip():
+        return set()
+    try:
+        with open(os.path.join(c.root, c.a.baseline), encoding="utf-8", errors="replace") as fh:
+            base = {l.rstrip("\r\n") for l in fh if l.startswith(".") and l.strip() not in (".", "./")}
+    except OSError:
+        return set()
+    return base | {norm_path(c.a.baseline)}
+
+
+WORK_HIDDEN = {".gitignore", ".dockerignore", ".env.example", ".cofa_baseline", ".codex", ".agents", ".github"}
+
+
+def fix_hint(q):
+    add = "git add <이 경로>; git commit -m \"무엇을, 왜\" (git add -A 금지, 커밋이 막히면 이 명령을 사람에게 준다)"
+    if ENV_RX.fullmatch(os.path.basename(q)):
+        return "커밋 금지. .gitignore에 추가한다"
+    if q.startswith(".") and q.split("/")[0] not in WORK_HIDDEN:  # .bash_history, .local/ 같은 홈 환경 파일
+        return "환경 파일(기록, 캐시, 자격 증명)이면 git add 금지, 최상위 이름을 .gitignore에 추가한다. 작업물일 때만 " + add
+    return add
+
+
 def git_clean(c):
-    rc, out = git(c.root, "status", "--porcelain", "-uall")
+    rc, out = git(c.root, "status", "--porcelain", "-uall", "--", ".")  # root가 하위 폴더면 그 아래만
     if rc != 0:
         return 0, [F("(전체)", "git 저장소가 아님", "git init 후 커밋한다")]
     n = len(git(c.root, "ls-files")[1].splitlines())
-    bad = [F(c.show(q), "커밋되지 않음", "커밋 금지. .gitignore에 추가한다" if ENV_RX.fullmatch(os.path.basename(q))
-             else "git add <이 경로>; git commit -m \"무엇을, 왜\" (git add -A 금지)") for q in status_paths(out)]
+    base = baseline(c)
+    pre = lambda q: any(q == b or (b.endswith("/") and q.startswith(b)) for b in base)
+    mine = [q for l in out.splitlines() if l.strip() for q in status_paths(l) if not (l.startswith("??") and pre(q))]
+    bad = [F(c.show(q), "커밋되지 않음", fix_hint(q)) for q in mine]
     if n == 0:
         bad.append(F("(전체)", "커밋된 파일 0개는 통과가 아니다", "작업물을 커밋한다"))
     return n, bad
@@ -358,6 +385,7 @@ def main(argv=None):
     ap.add_argument("--pii-cols")
     ap.add_argument("--pii-min-len", type=int, default=3)
     ap.add_argument("--exclude", type=split, default=[])
+    ap.add_argument("--baseline", default=".cofa_baseline", help="설치 전부터 있던 미추적 경로 목록(미커밋 검사에서 뺌)")
     a = ap.parse_args(argv)
     if not os.path.isdir(a.root):
         ap.error("--root가 폴더가 아님")

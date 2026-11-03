@@ -7,6 +7,16 @@ OURS_CFG=0
 KIT="$(cd "$(dirname "$0")" && pwd)"
 DEST="$(pwd)"
 
+# 0) 설치 전부터 있던 미추적 경로(홈 폴더 환경 파일 등)를 기록: cofa_check 미커밋 검사에서 뺀다
+git rev-parse --git-dir >/dev/null 2>&1 || { git init -q && echo "[git] 저장소가 없어 git init" || echo "[git] git init 실패. 사람에게 보고"; }
+# 최상위 숨김 경로만 기록한다(과제 파일은 처음에 커밋해야 하므로 기준선에 넣지 않는다)
+if [ "$(cd "$(git rev-parse --show-toplevel)" && pwd -P)" != "$(pwd -P)" ]; then
+  echo "[baseline] 작업 폴더가 저장소 루트가 아님, 기록 안 함"
+elif [ ! -e "$DEST/.cofa_baseline" ]; then
+  git -c core.quotepath=off status --porcelain -unormal | sed -n 's/^?? //p' | sed 's/^"//; s/"$//' | grep '^\.' > "$DEST/.cofa_baseline" || true
+  echo "[baseline] 숨김 미추적 경로 $(wc -l < "$DEST/.cofa_baseline")개 기록 (.cofa_baseline, 수정 금지)"
+fi
+
 # 1) AGENTS.md: 없으면 복사, 있으면 플랫폼 내용 아래에 덧붙임(기존 내용 유지)
 if [ -f "$DEST/AGENTS.md" ]; then
   if ! grep -q "작업 규칙 (모든 단계에 적용)" "$DEST/AGENTS.md"; then
@@ -44,17 +54,21 @@ for d in "$KIT"/.agents/skills/*/; do
   else cp -r "$d" "$DEST/.agents/skills/$n"; echo "[copy] skill $n"; fi
 done
 
-# 5) 설치 기록 커밋 (작업 이력에 외부 자료 사용 사실을 남김)
-git rev-parse --git-dir >/dev/null 2>&1 || { git init -q; echo "[git] 저장소가 없어 git init"; }
+# 5) 설치 기록 커밋 (작업 이력에 외부 자료 사용 사실을 남김). .git이 읽기 전용이어도 설치는 끝까지 간다
+set +e
 git config user.name  >/dev/null 2>&1 || git config user.name  "candidate"
 git config user.email >/dev/null 2>&1 || git config user.email "candidate@local"
 # 키트가 놓은 파일만 커밋 (플랫폼 소유 파일은 건드리지 않음)
-git add AGENTS.md
-for f in "$KIT"/.codex/agents/*.toml; do git add ".codex/agents/$(basename "$f")"; done
-for d in "$KIT"/.agents/skills/*/; do git add ".agents/skills/$(basename "$d")"; done
-[ "$OURS_CFG" = 1 ] && git add .codex/config.toml
-if git diff --cached --quiet; then echo "[git] 커밋할 변경 없음"
-else git commit -q -m "작업 규칙·서브에이전트·스킬 설정 (출처: 공개 저장소 MIIXmix/cofa-kit)" && echo "[git] 설치 커밋 완료"; fi
+ok=1
+git add AGENTS.md || ok=0
+for f in "$KIT"/.codex/agents/*.toml; do git add ".codex/agents/$(basename "$f")" || ok=0; done
+for d in "$KIT"/.agents/skills/*/; do git add ".agents/skills/$(basename "$d")" || ok=0; done
+if [ "$OURS_CFG" = 1 ]; then git add .codex/config.toml || ok=0; fi
+if [ -e .cofa_baseline ]; then git add .cofa_baseline || ok=0; fi
+if [ "$ok" = 0 ]; then echo "[git] git add 실패(.git 읽기 전용 등). 파일 설치는 끝남. 우회하지 말고 사람이 직접: git add AGENTS.md .codex/agents .agents/skills (있으면 .cofa_baseline) 후 git commit -m '키트 설치'"
+elif git diff --cached --quiet; then echo "[git] 커밋할 변경 없음"
+elif git commit -q -m "작업 규칙·서브에이전트·스킬 설정 (출처: 공개 저장소 MIIXmix/cofa-kit)"; then echo "[git] 설치 커밋 완료"
+else echo "[git] 커밋 실패(.git 읽기 전용 등). 파일 설치는 끝남. 우회하지 말고 사람이 직접 커밋"; fi
 
 echo
 echo "다음: 1) Codex 종료(/quit) 후 다시 실행(codex)"
