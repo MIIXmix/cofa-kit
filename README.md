@@ -12,7 +12,8 @@ Codex 작업용 개인 지침·설정·스킬 모음. 과제 내용·답안·결
 | `.agents/skills/elicit-requirements` | 담당자 질문 목록 → REQUIREMENTS.md, 계획을 막는 질문만 2라운드와 20분 상한, 나머지는 구현 중에도 계속. 개인정보와 보안 질문 목록 포함 |
 | `.agents/skills/modeling-options` | 데이터 조합, 군집, 분류, 배정, 경로, 거리 계산의 방법 후보표와 트레이드오프 최적화 공통 규칙 |
 | `.agents/skills/independent-verify` | 원자료 기반 독립 재계산·대조 |
-| `.agents/skills/pre-submit` | 제출 전 점검표 + 서술형 예상 질문 6개 |
+| `.agents/skills/pre-submit` | 제출 전 점검표 + 서술형 예상 질문 6개. `scripts/cofa_check.py`(표준 라이브러리만)가 필수 파일, 식별정보, 키 하드코딩, 의존성, 원본 변경, 미커밋을 기계 점검하고 실패마다 고치는 법을 출력 |
+| `.agents/skills/cofa-rules` | AGENTS.md 지도의 세부 규칙(근거 파일, 개인정보, 작업 단위와 병렬). AGENTS.md는 40줄 지도로 유지 |
 | `.agents/skills/plan-and-scope` | PLAN.md(수용 기준·MVP·시간 배분) + COLLAB_LOG.md |
 | `.agents/skills/webapp-build` | 웹 서비스 세로 단위 구현, 0.0.0.0·Browser 미리보기 규칙, 보안과 배포 기본값, 데이터 갱신(버전, diff, 재업로드) |
 | `.agents/skills/webapp-test` | 수용 기준 → 자동 테스트, Browser 수동 점검표 |
