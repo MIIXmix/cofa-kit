@@ -8,7 +8,7 @@ Codex 작업용 개인 지침·설정·스킬 모음. 과제 내용·답안·결
 | `.codex/config.toml` | 서브에이전트 중첩 1단계 제한(동시 실행 수는 지정 안 함, 병렬 규칙과 동시 최대 3개는 AGENTS.md 8-7) |
 | `.codex/agents/executor.toml` | 실행자 서브에이전트, 병렬 실행 전제(지정 파일만 수정, 커밋은 메인) (기본: 메인 모델 상속, Luna 6 지정은 주석 해제) |
 | `.codex/agents/verifier.toml` | 독립 검증 서브에이전트 (기본: 상속, Sol 6.0 지정은 주석 해제, 최대 5항목·1회) |
-| `.codex/agents/auditor.toml` | 읽기 전용(`sandbox_mode = "read-only"`) 적대적 감사 서브에이전트, 5단계 중 감사 단계 담당 |
+| `.codex/agents/auditor.toml` | 읽기 전용(`sandbox_mode = "read-only"`) 적대적 감사 서브에이전트, MVP 동작 직후 1회(요구사항 대조, 남은 구현과 병렬) |
 | `.agents/skills/elicit-requirements` | 담당자 질문 목록 → REQUIREMENTS.md, 계획을 막는 질문만 2라운드와 20분 상한, 나머지는 구현 중에도 계속. 개인정보와 보안 질문 목록 포함 |
 | `.agents/skills/modeling-options` | 데이터 조합, 군집, 분류, 배정, 경로, 거리 계산의 방법 후보표와 트레이드오프 최적화 공통 규칙 |
 | `.agents/skills/independent-verify` | 원자료 기반 독립 재계산·대조 |
